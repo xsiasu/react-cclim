@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Movies from './Movie';
 import './App.css';
 
 class App extends Component {
@@ -30,14 +30,27 @@ class App extends Component {
     })
   }
 
+  _renderMovies = () => {
+    const movies = this.state.movies.map(
+      movie => {
+        return(
+          <Movies 
+            name = {movie.name}
+            image = {movie.image}
+            key = {movie.id}
+            category = {movie.category}
+          />
+        )
+      }
+    )
+  }
+
   render() {
+    const {movies} = this.state;
+    console.log(movies)
     return (
-      <div className="App">
-        <header className="App-header">
-          
-
-
-        </header>
+      <div className={movies?'app':'app-loading'}>
+        {movies?this._renderMovies():'Loading'}
       </div>
     );
   }
