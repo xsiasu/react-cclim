@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Movies from './Movie';
+import Glass from './Glass';
 import './App.css';
 
 class App extends Component {
@@ -7,50 +7,47 @@ class App extends Component {
   state = {}
 
   componentDidMount() {
-    this._getMovies()
+    this._getGlasses()
   }
   
-  _callApi = () => {
-    return(
-      fetch("https://res.cloudinary.com/dlrv4nsyi/raw/upload/v1544429554/data/json/products.json")
-      .then(response => response.json())
-      .then(json => console.log(json))
-      .then(err => {
-        console.log(err)
-      })
 
-    )
 
-  }
-
-  _getMovies = async() => {
-    const movies = await this._callApi();
+  _getGlasses = async() => {
+    const glasses = await this._callApi();
     this.setState({
-      movies
+      glasses
     })
   }
 
-  _renderMovies = () => {
-    const movies = this.state.movies.map(
-      movie => {
+  _renderGlasses = () => {
+    const glasses = this.state.glasses.map(glass => {
         return(
-          <Movies 
-            name = {movie.name}
-            image = {movie.image}
-            key = {movie.id}
-            category = {movie.category}
+          <Glass
+            name = {glass.name}
+            image = {glass.image}
+            key = {glass.id}
+            category = {glass.category}
           />
         )
-      }
-    )
+      })
+      return glasses;
+  }
+
+  _callApi = () => {
+    return fetch(
+      "https://res.cloudinary.com/dlrv4nsyi/raw/upload/v1544526021/data/json/dataglasses.json"
+      )
+      .then(response => response.json())
+      .then(json => json.data.glasses)
+      .then(json => console.log(json))
+      .then(err => console.log(err))
   }
 
   render() {
-    const {movies} = this.state;
-    console.log(movies)
+    const {glasses} = this.state;
     return (
-      <div className={movies?'app':'app-loading'}>
-        {movies?this._renderMovies():'Loading'}
+      <div className={glasses?'app':'app-loading'}>
+        {glasses?this._renderGlasses():'Loading'}
       </div>
     );
   }

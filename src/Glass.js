@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Movies ({name, image, price, url,category}) {
+function Glass ({name, image, price, url,category}) {
     return(
         <div>
             <div>
                 <div>{name}</div>
             </div>
             <div>
-                <MoviePoster 
+                <GlassPoster 
                     alt={name}
                     image={image}
                     name={name}
+                    price={price}
                 />
             </div>
             <div>
@@ -25,7 +26,7 @@ function Movies ({name, image, price, url,category}) {
 }
 
 
-function MoviePoster({name,image}) {
+function GlassPoster({name,image}) {
     return(
         <img src={image} alt={name} />
     )
@@ -33,19 +34,20 @@ function MoviePoster({name,image}) {
 
 
 
-Movies.prototype = {
+Glass.prototype = {
     name     : PropTypes.string.isRequired,
     image    : PropTypes.string.isRequired,
     category  : PropTypes.string.isRequired,
     url       : PropTypes.string.isRequired,
+    price     : PropTypes.number.isRequired
     
 }
 
-MoviePoster.prototype = {
+GlassPoster.prototype = {
     name     : PropTypes.string.isRequired,
     image    : PropTypes.string.isRequired,
 }
 
 
 
-export default Movies;
+export default Glass;
