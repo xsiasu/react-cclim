@@ -1,13 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
-import Glass from './Glass';
 import { Responsive, WidthProvider } from "react-grid-layout";
-
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 export default class ShowcaseLayout extends React.Component {
- 
   constructor(props) {
     super(props);
     this.state = {
@@ -21,47 +18,30 @@ export default class ShowcaseLayout extends React.Component {
     this.onCompactTypeChange = this.onCompactTypeChange.bind(this);
     this.onLayoutChange = this.onLayoutChange.bind(this);
     this.onNewLayout = this.onNewLayout.bind(this);
-    
   }
 
   componentDidMount() {
     this.setState({ mounted: true });
-    this._getGlasses()
   }
 
-  _renderGlasses() {
-     return _.map(this.state.glasses, function(glass) {
+  generateDOM() {
+    return _.map(this.state.layouts.lg, function(l, i) {
       return (
-        <Glass
-          name = {glass.name}
-          image = {glass.image}
-          key = {glass.id}
-          category = {glass.category}
-        />     
-        
+        <div key={i} className={l.static ? "static" : ""}>
+          {l.static ? (
+            <span
+              className="text"
+              title="This item is static and cannot be removed or resized."
+            >
+              Static - {i}
+            </span>
+          ) : (
+            <span className="text">{i}</span>
+          )}
+        </div>
       );
     });
   }
-
-  // _renderGlasses() {
-  //   return _.map(this.state.layouts.lg, function(l, i) {
-  //     return (
-  //       <div key={i} className={l.static ? "static" : ""}>
-  //         {l.static ? (
-  //           <span
-  //             className="text"
-  //             title="This item is static and cannot be removed or resized."
-  //           >
-  //             Static - {i}
-  //           </span>
-  //         ) : (
-  //           <span className="text">{i}</span>
-  //         )}
-  //       </div>
-  //     );
-  //   });
-  // }
-
 
   onBreakpointChange(breakpoint) {
     this.setState({
@@ -90,28 +70,25 @@ export default class ShowcaseLayout extends React.Component {
     });
   }
 
-
-  _getGlasses = async() => {
-    const glasses = await this._callApi();
-    this.setState({
-      glasses
-    })
-  }
-  _callApi = () => {
-    // 무비데이터를 리턴한다
-    return(
-      fetch("https://res.cloudinary.com/dlrv4nsyi/raw/upload/v1544526021/data/json/dataglass.json")
-      .then(response =>response.json())
-      .then(json => json.data.glasses)
-      .catch(err => console.log(err))
-    )
-  }
-
   render() {
-    const {glasses} = this.state;
-    console.log({glasses});
     return (
       <div>
+        <div>
+          Current Breakpoint: {this.state.currentBreakpoint} ({
+            this.props.cols[this.state.currentBreakpoint]
+          }{" "}
+          columns)
+        </div>
+        <div>
+          Compaction type:{" "}
+          {_.capitalize(this.state.compactType) || "No Compaction"}
+        </div>
+        <button onClick={this.onNewLayout}>Generate New Layout</button>
+        <button onClick={this.onCompactTypeChange}>
+          Change Compaction Type
+        </button>
+
+
         <ResponsiveReactGridLayout
           {...this.props}
           layouts={this.state.layouts}
@@ -125,8 +102,11 @@ export default class ShowcaseLayout extends React.Component {
           compactType={this.state.compactType}
           preventCollision={!this.state.compactType}
         >
-       {this._renderGlasses()}
+          {this.generateDOM()}
         </ResponsiveReactGridLayout>
+
+
+        
       </div>
     );
   }
@@ -137,7 +117,6 @@ ShowcaseLayout.propTypes = {
 };
 
 ShowcaseLayout.defaultProps = {
-  isResizable: false,
   className: "layout",
   rowHeight: 30,
   onLayoutChange: function() {},
@@ -146,7 +125,7 @@ ShowcaseLayout.defaultProps = {
 };
 
 function generateLayout() {
-  return _.map(_.range(0, 19), function(item, i) {
+  return _.map(_.range(0, 25), function(item, i) {
     var y = Math.ceil(Math.random() * 4) + 1;
     return {
       x: (_.random(0, 5) * 2) % 12,

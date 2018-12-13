@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 function Glass ({name, image, price, url,category}) {
     return(
-        <div>
+        <div className="box">
             <div>
                 <div>{name}</div>
             </div>
