@@ -10,8 +10,6 @@ class App extends Component {
     this._getGlasses()
   }
   
-
-
   _getGlasses = async() => {
     const glasses = await this._callApi();
     this.setState({
@@ -21,30 +19,31 @@ class App extends Component {
 
   _renderGlasses = () => {
     const glasses = this.state.glasses.map(glass => {
-        return(
-          <Glass
-            name = {glass.name}
-            image = {glass.image}
-            key = {glass.id}
-            category = {glass.category}
-          />
-        )
+      return(
+        <Glass
+          name = {glass.name}
+          image = {glass.image}
+          key = {glass.id}
+          category = {glass.category}
+        />)
       })
       return glasses;
   }
-
   _callApi = () => {
-    return fetch(
-      "https://res.cloudinary.com/dlrv4nsyi/raw/upload/v1544526021/data/json/dataglasses.json"
-      )
-      .then(response => response.json())
+    // 무비데이터를 리턴한다
+    return(
+      fetch("https://res.cloudinary.com/dlrv4nsyi/raw/upload/v1544526021/data/json/dataglass.json")
+      .then(response =>response.json())
       .then(json => json.data.glasses)
-      .then(json => console.log(json))
-      .then(err => console.log(err))
+      .catch(err => console.log(err))
+    )
   }
+
+ 
 
   render() {
     const {glasses} = this.state;
+    console.log({glasses});
     return (
       <div className={glasses?'app':'app-loading'}>
         {glasses?this._renderGlasses():'Loading'}

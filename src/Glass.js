@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+
+
+
 function Glass ({name, image, price, url,category}) {
     return(
         <div>
@@ -28,7 +31,7 @@ function Glass ({name, image, price, url,category}) {
 
 function GlassPoster({name,image}) {
     return(
-        <img src={image} alt={name} />
+        <img src={image} alt={name} width="200"/>
     )
 }
 
