@@ -31,7 +31,7 @@ function Glass ({name, image, price, url,category}) {
 
 function GlassPoster({name,image}) {
     return(
-        <img src={image} alt={name} width="200"/>
+        <img src={image} alt={name} width="100%"/>
     )
 }
 

@@ -1,48 +1,28 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import Hello from './Hello';
-import './style.css';
-import GridLayout from 'react-grid-layout';
+import React from "react";
+import ReactDOM from "react-dom";
+import ShowcaseLayout from "./ShowcaseLayout";
 
-
-const Box = (props) => {
-  const style = Object.assign({ background: 'silver', border: '1px solid black' }, props.style || {})
-  return <div {...props} style={style}  />
-}
-
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      name: 'React'
-    };
+class ExampleLayout extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { layout: [] };
+    this.onLayoutChange = this.onLayoutChange.bind(this);
   }
 
+  onLayoutChange(layout) {
+    this.setState({ layout: layout });
+  }
+
+
   render() {
-    var layout = [
-      { i: 'a', x: 0, y: 0, w: 1, h: 2 },
-      { i: 'b', x: 1, y: 0, w: 1, h: 2, minW: 2, maxW: 4 },
-      { i: 'c', x: 2, y: 0, w: 1, h: 2 }
-    ];
     return (
-      <GridLayout 
-        className="layout" 
-        layout={layout} 
-        cols={layout.length}
-        rowHeight={30} 
-        width={500}
-        margin={[1,1]}
-        containerPadding={[0,0]}
-        >
-        <Box key="a">a</Box>
-        <Box key="b">b</Box>
-        <Box key="c">c</Box>  
-        <Box key="d">a</Box>
-        <Box key="e">b</Box>
-        <Box key="f">c</Box>          
-      </GridLayout>
+      <div>
+        <ShowcaseLayout onLayoutChange={this.onLayoutChange} />
+      </div>
     );
   }
 }
 
-render(<App />, document.getElementById('root'));
+const contentDiv = document.getElementById("root");
+const gridProps = window.gridProps || {};
+ReactDOM.render(React.createElement(ExampleLayout, gridProps), contentDiv);
